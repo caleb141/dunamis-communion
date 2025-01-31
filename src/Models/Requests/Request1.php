@@ -5,11 +5,11 @@ use Helpers\ResponseHelper;
 
 class Request1 {
  
-    public static function addRequest($pdo, $requester_id, $num_members) {
+    public static function addRequest($pdo, $requester_id, $num_members, $req_date) {
         try {
             
-            $insertStmt = $pdo->prepare('INSERT INTO team_request (requester_id, num_members_needed, status, created_at, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)');
-            $insertStmt->execute([$requester_id, $num_members, 0]);
+            $insertStmt = $pdo->prepare('INSERT INTO team_request (requester_id, num_members_needed, request_date, status, created_at, updated_at) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)');
+            $insertStmt->execute([$requester_id, $num_members, $req_date, 0]);
 
             if ($insertStmt->rowCount() > 0) {
                 return ResponseHelper::sendResponse(200, true, 'Request logged successfully');

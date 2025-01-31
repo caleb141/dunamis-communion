@@ -108,8 +108,21 @@ CREATE TABLE team_request (
     id SERIAL PRIMARY KEY,
     requester_id INT NOT NULL,
     num_members_needed VARCHAR(10) NOT NULL,
+    request_date DATE NOT NULL,
     status INT NOT NULL DEFAULT 0, -- 1: active, 0: inactive
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (requester_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- Create the `users_ava` table
+CREATE TABLE users_availability (
+    id SERIAL PRIMARY KEY,
+    team_id INT NOT NULL,
+    the_date DATE NOT NULL,
+    members JSONB,
+    status INT NOT NULL DEFAULT 0, -- 1: active, 0: inactive
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE SET NULL
 );

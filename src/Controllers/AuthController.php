@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Auth;
 use Database\Database;
 use Helpers\ResponseHelper;
+use Models\Audit\Audit1;
 
 class AuthController {
     private $pdo;
@@ -29,6 +30,7 @@ class AuthController {
         }
 
         Auth::register($this->pdo, $username, $password, $role, $name, $phone);
+        Audit1::addtOLog($this->pdo, 'register', 'User Registered');
 
     }
 
@@ -46,6 +48,7 @@ class AuthController {
         }
 
         Auth::login($this->pdo, $username, $password);
+        Audit1::addtOLog($this->pdo, 'login', 'User logged in.');
 
     }
 
@@ -53,6 +56,7 @@ class AuthController {
 
         http_response_code(200);
         ResponseHelper::sendResponse(200, true, 'Logged out successfully');
+        Audit1::addtOLog($this->pdo, 'logout', 'User logged out.');
     }
 }
 

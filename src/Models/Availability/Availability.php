@@ -1,13 +1,12 @@
 <?php
-namespace Models\Attendance;
+namespace Models\Availability;
 
 use Helpers\ResponseHelper;
 
-class Attendance {
+class Availability {
     public $id;
     public $name;
     public $status;
-
 
     public function __construct($id, $name, $status) {
         $this->id = $id;
@@ -20,7 +19,7 @@ class Attendance {
             // Prepare the SQL query
             $stmt = $pdo->prepare('
                 SELECT
-                    attendance_logs.*,
+                    users_availability.*,
                     teams.team_name,
                     COALESCE(json_agg(
                         CASE
@@ -31,17 +30,17 @@ class Attendance {
                                     \'phone\', u.phone
                                 )
                         END
-                    ) FILTER (WHERE u.id IN (SELECT jsonb_array_elements_text(attendance_logs.members::jsonb)::int)), \'[]\') AS member_details
+                    ) FILTER (WHERE u.id IN (SELECT jsonb_array_elements_text(users_availability.members::jsonb)::int)), \'[]\') AS member_details
                 FROM
-                    attendance_logs
+                    users_availability
                 INNER JOIN
-                    teams ON attendance_logs.team_id = teams.id
+                    teams ON users_availability.team_id = teams.id
                 LEFT JOIN
-                    users u ON u.id = ANY(SELECT jsonb_array_elements_text(attendance_logs.members::jsonb)::int)
+                    users u ON u.id = ANY(SELECT jsonb_array_elements_text(users_availability.members::jsonb)::int)
                 WHERE
-                    attendance_logs.team_id = ?
+                    users_availability.team_id = ?
                 GROUP BY
-                    attendance_logs.id,
+                    users_availability.id,
                     teams.team_name
             ');
     
@@ -69,7 +68,7 @@ class Attendance {
         try {
             $stmt = $pdo->prepare('
                 SELECT
-                    attendance_logs.*,
+                    users_availability.*,
                     teams.team_name,
                     COALESCE(json_agg(
                         CASE
@@ -80,17 +79,17 @@ class Attendance {
                                     \'phone\', u.phone
                                 )
                         END
-                    ) FILTER (WHERE u.id IN (SELECT jsonb_array_elements_text(attendance_logs.members::jsonb)::int)), \'[]\') AS member_details
+                    ) FILTER (WHERE u.id IN (SELECT jsonb_array_elements_text(users_availability.members::jsonb)::int)), \'[]\') AS member_details
                 FROM
-                    attendance_logs
+                    users_availability
                 INNER JOIN
-                    teams ON attendance_logs.team_id = teams.id
+                    teams ON users_availability.team_id = teams.id
                 LEFT JOIN
-                    users u ON u.id = ANY(SELECT jsonb_array_elements_text(attendance_logs.members::jsonb)::int)
+                    users u ON u.id = ANY(SELECT jsonb_array_elements_text(users_availability.members::jsonb)::int)
                 WHERE
-                    attendance_logs.team_id = ? AND attendance_logs.date = ?
+                    users_availability.team_id = ? AND users_availability.the_date = ?
                 GROUP BY
-                    attendance_logs.id,
+                    users_availability.id,
                     teams.team_name
             ');
     

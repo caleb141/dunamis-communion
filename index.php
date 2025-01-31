@@ -8,7 +8,9 @@ CorsMiddleware::handle();
 use Helpers\ResponseHelper;
 use Helpers\UtilityHelper;
 
-$main_url = '/dunamis-com';
+#$main_url = '/dunamis-com';
+$main_url = '/dunamis';
+
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestUri = str_replace($main_url, '', $requestUri);
 
@@ -30,6 +32,24 @@ switch (true) {
             }
         } elseif ($method === 'POST') {
             $controller->attendanceUser();
+        } else {
+            ResponseHelper::sendResponse(405, false, UtilityHelper::getStatusFromCode(405));
+        }
+        break;
+    
+    //Availability route
+    case preg_match('/^\/api\/availability(?:\/\d+)?(?:\/\d{4}-\d{2}-\d{2})?$/', $requestUri, $matches):
+        $controller = new \Controllers\AvailabilityController();
+        [$id, $date] = UtilityHelper::getIdFromUriDate($requestUri);
+
+        if ($method === 'GET') {
+            if ($id !== null && $date !== null) {
+                $controller->getOne($id, $date);
+            } else {
+                $controller->getAll($id);
+            }
+        } elseif ($method === 'POST') {
+            $controller->availabilityUser();
         } else {
             ResponseHelper::sendResponse(405, false, UtilityHelper::getStatusFromCode(405));
         }

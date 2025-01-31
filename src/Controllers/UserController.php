@@ -6,6 +6,7 @@ use Models\Users\User;
 use Models\Users\User1;
 use Helpers\ResponseHelper;
 use Database\Database;
+use Models\Audit\Audit1;
 
 class UserController {
 
@@ -39,6 +40,7 @@ class UserController {
 
         if (isset($data['name'], $data['phone'], $data['username'])) {
             User1::update($this->pdo, $id, $data['name'], $data['phone'], $data['username'], $data['role']);
+            Audit1::addtOLog($this->pdo, 'user', 'User details updated');
         } else {
             ResponseHelper::sendErrorResponse(400, false, 'Invalid input', 'INVALID_INPUT');
         }
@@ -50,6 +52,7 @@ class UserController {
 
         if (isset($data['newPassword'])) {
             User1::updatePassword($this->pdo, $id, $data['newPassword']);
+            Audit1::addtOLog($this->pdo, 'user', 'User password updated');
         } else {
             ResponseHelper::sendErrorResponse(400, false, 'Invalid input', 'INVALID_INPUT');
         }
@@ -58,6 +61,7 @@ class UserController {
     public function deleteUser($id) {
     
         User1::delete($this->pdo, $id);
+        Audit1::addtOLog($this->pdo, 'user', 'User deleted');
 
     }
 }

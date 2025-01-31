@@ -7,6 +7,7 @@ use Models\Teams\Team1;
 use Models\Teams\Team2;
 use Helpers\ResponseHelper;
 use Database\Database;
+use Models\Audit\Audit1;
 
 class TeamController {
 
@@ -47,6 +48,7 @@ class TeamController {
                 ],
                 $data['members']
             );
+            Audit1::addtOLog($this->pdo, 'team', 'Created a new team');
 
         } else {
             ResponseHelper::sendErrorResponse(400, false, 'Invalid input', $data);
@@ -72,6 +74,7 @@ class TeamController {
                     $data['tempMembers'],
                     $data['memberId']
                 );
+                Audit1::addtOLog($this->pdo, 'team', 'Team shufffling occured');
 
             } elseif ($data['action'] == 'move') {
                 Team2::move(
@@ -82,6 +85,7 @@ class TeamController {
                     $data['tempMembers'],
                     $data['memberId']
                 );
+                Audit1::addtOLog($this->pdo, 'team', 'Team movement occured');
             } else{
                 ResponseHelper::sendErrorResponse(400, false, 'Invalid action', 'INVALID_ACTION');
             }
@@ -116,6 +120,7 @@ class TeamController {
                 $data['members'],
                 $data['tempMembers']
             );
+            Audit1::addtOLog($this->pdo, 'team', 'Team details updated successfully');
           
         } else {
             ResponseHelper::sendErrorResponse(400, false, 'Invalid input', 'INVALID_INPUT');
@@ -129,6 +134,7 @@ class TeamController {
     public function deleteTeam($id) {
 
         Team::delete($this->pdo, $id);
+        Audit1::addtOLog($this->pdo, 'team', 'Team deleted successfully');
 
     }
 }

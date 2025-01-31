@@ -39,4 +39,21 @@ class UtilityHelper{
         return $statusMessages[$statusCode] ?? 'Unknown Status';
     }
 
+    public static function getUserIdFromHeaders() {
+    
+        $headers = getallheaders();
+        if (isset($headers['user_id'])) {
+            return $headers['user_id'];
+        }
+    
+        foreach ($_SERVER as $key => $value) {
+            if (stripos($key, 'HTTP_USER_ID') !== false) {
+                return $value;
+            }
+        }
+    
+        return "0";
+    }
+    
+
 }
