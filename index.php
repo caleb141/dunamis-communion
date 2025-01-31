@@ -16,7 +16,7 @@ echo "first request url is :".$requestUri; // Add this to debug the URI
 $requestUri = str_replace($main_url, '', $requestUri);
 echo "last request url is :".$requestUri; // Add this to debug the URI
 $method = $_SERVER['REQUEST_METHOD'];
-
+error_log("Processed Request URI: " . $requestUri);
 
 switch (true) {
     //Attendance route
