@@ -12,10 +12,10 @@ use Helpers\UtilityHelper;
 $main_url = '/dunamis';
 
 //$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$requestUri = $_SERVER['PHP_SELF'];
-echo "php seld request url is :".$requestUri; // Add this to debug the URI
-//$requestUri = str_replace($main_url, '', $requestUri);
-//echo "last request url is :".$requestUri; // Add this to debug the URI
+$requestUri = $_SERVER['REQUEST_URI']; // Get the full request path
+$requestUri = strtok($requestUri, '?'); // Remove query strings if any
+echo "request url is :".$requestUri; // Add this to debug the URI
+
 $method = $_SERVER['REQUEST_METHOD'];
 error_log("Processed Request URI: " . $requestUri);
 
