@@ -14,7 +14,7 @@ $main_url = '/dunamis';
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestUri = str_replace($main_url, '', $requestUri);
 
-//echo $requestUri; // Add this to debug the URI
+echo $requestUri; // Add this to debug the URI
 $method = $_SERVER['REQUEST_METHOD'];
 
 
